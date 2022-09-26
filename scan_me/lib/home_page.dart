@@ -1,3 +1,7 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:scan_me/sign_in.dart';
 import 'package:scan_me/sign_up.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +16,13 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
 
+  File? imageFile;
+
 @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Recently Scanned Documents"),
+        title: const Text("Home Page"),
         actions: [
           // Navigate to the Search Screen
           IconButton(
@@ -52,92 +58,94 @@ class HomePageState extends State<HomePage> {
                     }
                    }
                   ),
+        ],
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (imageFile != null) 
+              Container(
+                width: 700,
+                height: 600,
+                alignment: Alignment.center,
+                decoration: BoxDecoration (
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: FileImage(imageFile!),
+                    fit: BoxFit.cover
+                  ),
+                  border: Border.all(width: 8, color: Colors.black),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              )
+            else
+              Container(
+
+              )
+          ],
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'button1',
+            onPressed: () => getImage(ImageSource.camera),
+            tooltip: "increment",
+            child: const Icon(Icons.camera_alt),
+          ),
+
+          const Padding(
+            padding: EdgeInsets.only(bottom: 15)),
+
+          FloatingActionButton(
+            heroTag: 'button2',
+            onPressed: () => getImage(ImageSource.gallery),
+            tooltip: "increment",
+            child: const Icon(Icons.photo_library_rounded),
+      ),
+
+      const Padding(
+            padding: EdgeInsets.only(bottom: 15)),
+
+          FloatingActionButton(
+            heroTag: 'button3',
+            onPressed: () async {
+            },
+            tooltip: "increment",
+            child: const Icon(Icons.file_copy_rounded),
+      ),
 
         ],
       ),
-      body:
-      ListView(
-        children: <Widget> [
-          Card(
-            child: ListTile(
-              title:Text("Document One") ,
-            )
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Document Two"),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Document Three"),
-            )
-          ),
-          Card(
-            child: ListTile(
-              title:Text("Document Four") ,
-            )
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Document Five"),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Document Six"),
-            )
-          ),
-          Card(
-            child: ListTile(
-              title:Text("Document Seven") ,
-            )
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Document Eight"),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Document Nine"),
-            ),
-          ),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const <Widget>[
-              Icon(
-                Icons.home,
-                color: Color.fromARGB(255, 52, 12, 122),
-                size: 30.0,
-              ),
-
-              Icon(
-                Icons.add_a_photo_rounded,
-                color: Color.fromARGB(255, 52, 12, 122),
-                size: 30.0,
-              ),
-
-              Icon(
-                Icons.photo_library,
-                color: Color.fromARGB(255, 52, 12, 122),
-                size: 30.0,
-              ),
-
-              Icon(
-                Icons.account_circle_sharp,
-                color: Color.fromARGB(255, 52, 12, 122),
-                size: 30.0,
-              ),
-  ],
-),
-        ],
-        shrinkWrap: true,
-
-      ),
     );
   }
+
+  void getImage(ImageSource source) async {
+    final file = await ImagePicker().getImage(
+      source: source,
+      imageQuality: 100
+      );
+
+    if (file?.path != null) {
+      setState(() {
+        imageFile = File(file!.path);
+      });
+    }
+
+  }
+
+  /*void selectImages() async {
+    final List<XFile>? selectedImages = await _picker.pickMultiImage();
+    if (selectedImages!.isNotEmpty){
+
+    }
+
+  }*/
 }
 
 class SearchPage extends StatelessWidget {

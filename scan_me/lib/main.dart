@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:scan_me/documents_view.dart';
+import 'package:scan_me/home_page.dart';
 import "package:flutter/material.dart";
  
 void main() {
@@ -111,3 +111,4 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+

@@ -1,6 +1,7 @@
-import 'package:scan_me/documents_view.dart';
+import 'package:scan_me/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:scan_me/sign_in.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({super.key});
@@ -75,18 +76,26 @@ class SignUp extends StatelessWidget {
                           color: Color.fromRGBO(246, 246, 246, 1), ),
                       ),
                       onPressed: () => Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => const HomePage())),
+                          .push(MaterialPageRoute(builder: (_) => const SignIn())),
                         ),
                     ),
                     const SizedBox(height: 20,),
                                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Already have an account? "),
-                        Text("SIGN IN",style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18
-                        ),),
+                      children: <Widget> [
+                        const Text("Already have an account? "),
+
+                        MaterialButton(
+                          child: const Text(
+                            "SIGN IN",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18
+                            ),
+                          ),                     
+                          onPressed: () => Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) => const SignIn())),
+                        ),
                       ],
                     )
                   ],
