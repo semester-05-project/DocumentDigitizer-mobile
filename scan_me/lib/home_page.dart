@@ -1,10 +1,11 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
-
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:scan_me/sign_in.dart';
-import 'package:scan_me/sign_up.dart';
+import 'preview_page.dart';
+import 'sign_in.dart';
+import 'sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'camera_mode.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -91,11 +92,15 @@ class HomePageState extends State<HomePage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+
           FloatingActionButton(
             heroTag: 'button1',
-            onPressed: () => getImage(ImageSource.camera),
+            onPressed: () async {
+            await availableCameras().then((value) => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+            },
             tooltip: "increment",
-            child: const Icon(Icons.camera_alt),
+            child: const Icon(Icons.camera_alt_rounded),
           ),
 
           const Padding(
@@ -126,17 +131,16 @@ class HomePageState extends State<HomePage> {
   }
 
   void getImage(ImageSource source) async {
-    final file = await ImagePicker().getImage(
+    final file = await ImagePicker().pickImage(
       source: source,
       imageQuality: 100
-      );
+    );
 
     if (file?.path != null) {
       setState(() {
         imageFile = File(file!.path);
       });
     }
-
   }
 
   /*void selectImages() async {

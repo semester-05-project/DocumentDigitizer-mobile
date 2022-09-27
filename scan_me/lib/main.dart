@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:scan_me/home_page.dart';
+import 'home_page.dart';
 import "package:flutter/material.dart";
  
 void main() {

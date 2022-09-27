@@ -1,7 +1,7 @@
-import 'package:scan_me/home_page.dart';
+import 'home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:scan_me/sign_in.dart';
+import 'sign_in.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({super.key});
