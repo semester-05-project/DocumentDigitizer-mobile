@@ -1,5 +1,5 @@
-import 'package:scan_me/home_page_signed_in.dart';
-import 'package:scan_me/sign_up.dart';
+import 'home_page_signed_in.dart';
+import 'sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_page.dart';
