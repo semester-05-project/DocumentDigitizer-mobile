@@ -2,7 +2,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'home_page.dart';
+import 'cropping_page.dart';
+import 'editing_page.dart';
+
+import 'filters_page.dart';
 
 class PreviewPage extends StatelessWidget {
   const PreviewPage({Key? key, required this.picture}) : super(key: key);
@@ -35,27 +38,24 @@ class PreviewPage extends StatelessWidget {
                 FloatingActionButton(
                   heroTag: 'button1',
                   tooltip: "increment",
-                  onPressed: () { 
-
-                  },
+                  onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const CropPage())),
                   child: const Icon(Icons.crop_rounded),
                 ),
 
                 FloatingActionButton(
                   heroTag: 'button2',
                   tooltip: "increment",
-                  onPressed: () { 
-
-                  },
+                  onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const FiltersPage())),
                   child: const Icon(Icons.mode_edit_rounded),
                 ),
 
                 FloatingActionButton(
                   heroTag: 'button3',
                   tooltip: "increment",
-                  onPressed: () { 
-
-                  },
+                  onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const EditPage())),
                   child: const Icon(Icons.check_rounded),
                 ),
               ],
