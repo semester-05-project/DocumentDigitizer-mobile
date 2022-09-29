@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scan_me/landing_page.dart';
 
 import 'home_page_signed_in.dart';
 import 'sign_up.dart';
@@ -19,8 +20,9 @@ class _SignInState extends State<SignIn> {
 
   Future SignIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MainPage()));
+
     // print(_emailController.text);
-    // print("aknf");
   }
 
   @override
