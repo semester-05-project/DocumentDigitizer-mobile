@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan_me/pick_images.dart';
 import 'sign_in.dart';
@@ -36,26 +37,33 @@ class HomePageState extends State<HomePage> {
                    // icon: Icon(Icons.book)
                    itemBuilder: (context){
                      return [
-                            const PopupMenuItem<int>(
-                                value: 0,
-                                child: Text("Sign In"),
-                            ),
-
-                            const PopupMenuItem<int>(
-                                value: 1,
-                                child: Text("Sign Up"),
-                            ),
+                            // const PopupMenuItem<int>(
+                            //     value: 0,
+                            //     child: Text("Sign In"),
+                            // ),
+                            //
+                            // const PopupMenuItem<int>(
+                            //     value: 1,
+                            //     child: Text("Sign Up"),
+                            // ),
+                           const PopupMenuItem<int>(
+                             value: 2,
+                             child: Text("Sign Out"),
+                           ),
                         ];
                    },
                    onSelected:(value){
-                    if (value == 0) {
-                      Navigator.of(context).
-                        pushReplacement( MaterialPageRoute(
-                          builder: (BuildContext context) => const SignIn()));
-                    } else if (value == 1) {
-                      Navigator.of(context).
-                        pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) => const SignUp()));
+                    // if (value == 0) {
+                    //   Navigator.of(context).
+                    //     pushReplacement( MaterialPageRoute(
+                    //       builder: (BuildContext context) => const SignIn()));
+                    // } else if (value == 1) {
+                    //   Navigator.of(context).
+                    //     pushReplacement(MaterialPageRoute(
+                    //       builder: (BuildContext context) => const SignUp()));
+                    // }else
+                      if(value ==2){
+                        FirebaseAuth.instance.signOut();
                     }
                    }
                   ),

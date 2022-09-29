@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scan_me/landing_page.dart';
 
 import 'home_page.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,10 @@ class _SignUpState extends State<SignUp> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  Future SignUn() async {
+  Future SignUp() async {
     if(_passwordController.text == _confirmPasswordController.text){
       await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MainPage()));
     }
     // print(_emailController.text);
     // print("aknf");
@@ -27,6 +29,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -101,8 +104,9 @@ class _SignUpState extends State<SignUp> {
                             fontWeight: FontWeight.w800,
                             color: Color.fromRGBO(246, 246, 246, 1), ),
                         ),
-                        onPressed: () => Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (_) => const SignIn())),
+                          onPressed: SignUp
+                      //   onPressed: () => Navigator.of(context)
+                      //       .push(MaterialPageRoute(builder: (_) => const SignIn())),
                       ),
                     ),
                     const SizedBox(height: 20,),
