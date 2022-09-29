@@ -1,12 +1,38 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'sign_in.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   const SignUp({super.key});
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
 
-  
+class _SignUpState extends State<SignUp> {
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  Future SignUn() async {
+    if(_passwordController.text == _confirmPasswordController.text){
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+    }
+    // print(_emailController.text);
+    // print("aknf");
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,10 +43,10 @@ class SignUp extends StatelessWidget {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.white,
         leading:
-        IconButton( 
-          onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => const HomePage())),
-        icon:const Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,)),
+        IconButton(
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const HomePage())),
+            icon:const Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,)),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -54,10 +80,10 @@ class SignUp extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          makeInput(label: "Username"),
-                          makeInput(label: "Email"),
-                          makeInput(label: "Password",obsureText: true),
-                          makeInput(label: "Confirm Pasword",obsureText: true)
+                          makeInput(label: "Username",controller: _usernameController),
+                          makeInput(label: "Email",controller: _emailController),
+                          makeInput(label: "Password",obsureText: true,controller: _passwordController),
+                          makeInput(label: "Confirm Pasword",obsureText: true,controller: _confirmPasswordController)
                         ],
                       ),
                     ),
@@ -65,22 +91,22 @@ class SignUp extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 40),
                       child: MaterialButton(
-                      minWidth: double.infinity,
-                      height:45,
-                      color: Colors.deepPurple,
-                      child: const Text(
-                        "SIGN UP",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: Color.fromRGBO(246, 246, 246, 1), ),
-                      ),
-                      onPressed: () => Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => const SignIn())),
+                        minWidth: double.infinity,
+                        height:45,
+                        color: Colors.deepPurple,
+                        child: const Text(
+                          "SIGN UP",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: Color.fromRGBO(246, 246, 246, 1), ),
                         ),
+                        onPressed: () => Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) => const SignIn())),
+                      ),
                     ),
                     const SizedBox(height: 20,),
-                                  Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget> [
                         const Text("Already have an account? "),
@@ -89,12 +115,12 @@ class SignUp extends StatelessWidget {
                           child: const Text(
                             "SIGN IN",
                             style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18
                             ),
-                          ),                     
+                          ),
                           onPressed: () => Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (_) => const SignIn())),
+                              .push(MaterialPageRoute(builder: (_) => const SignIn())),
                         ),
                       ],
                     )
@@ -110,7 +136,8 @@ class SignUp extends StatelessWidget {
   }
 }
 
-Widget makeInput({label,obsureText = false}){
+
+Widget makeInput({label,obsureText = false,controller}){
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -121,6 +148,7 @@ Widget makeInput({label,obsureText = false}){
       ),),
       const SizedBox(height: 5,),
       TextField(
+        controller: controller,
         obscureText: obsureText,
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 10),

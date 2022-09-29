@@ -1,8 +1,14 @@
 import 'dart:async';
+import 'package:scan_me/home_page_signed_in.dart';
+import 'package:scan_me/landing_page.dart';
+
 import 'home_page.dart';
 import "package:flutter/material.dart";
- 
-void main() {
+import "package:firebase_core/firebase_core.dart";
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(myapp());
 }
 // stateful visit
@@ -33,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(const Duration(seconds: 5), 
       () => Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => const HomePage()))
+        MaterialPageRoute(builder: (BuildContext context) => const LandingPage()))
       );
   }
 
