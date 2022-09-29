@@ -1,4 +1,11 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'camera_mode.dart';
+import 'pick_images.dart';
 
 class HomePageSigned extends StatefulWidget {
 
@@ -9,6 +16,8 @@ class HomePageSigned extends StatefulWidget {
 }
 
 class HomePageSignedState extends State<HomePageSigned> {
+
+  File? imageFile;
 
 @override
   Widget build(BuildContext context) {
@@ -32,38 +41,114 @@ class HomePageSignedState extends State<HomePageSigned> {
         ],
       ),
 
-      body:
-      ListView(
-        // ignore: sort_child_properties_last
-        children: <Widget> [
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (imageFile != null) 
+              Container(
+                width: 500,
+                height: 400,
+                alignment: Alignment.center,
+                decoration: BoxDecoration (
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: FileImage(imageFile!),
+                    fit: BoxFit.cover
+                  ),
+                  border: Border.all(width: 8, color: Colors.black),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              )
+            else
+              Container(
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const <Widget>[
-              Icon(
-                Icons.home,
-                color: Color.fromARGB(255, 52, 12, 122),
-                size: 30.0,
               ),
-
-              Icon(
-                Icons.add_a_photo_rounded,
-                color: Color.fromARGB(255, 52, 12, 122),
-                size: 30.0,
-              ),
-
-              Icon(
-                Icons.photo_library_rounded,
-                color: Color.fromARGB(255, 52, 12, 122),
-                size: 30.0,
-              ),
-  ],
-),
-        ],
-        shrinkWrap: true,
-
+            const SizedBox(height: 20,),
+              Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.builder(
+                        itemCount: imageFileList!.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Image.file(File(imageFileList![index].path), fit: BoxFit.cover);
+                        }
+                    ),
+                  )
+              )
+          ],
+        ),
       ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+
+          FloatingActionButton(
+            heroTag: 'button1',
+            onPressed: () async {
+            await availableCameras().then((value) => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+            },
+            tooltip: "increment",
+            child: const Icon(Icons.camera_alt_rounded),
+          ),
+
+          const Padding(
+            padding: EdgeInsets.only(bottom: 15)),
+
+          FloatingActionButton(
+            heroTag: 'button2',
+            onPressed: () => getImage(ImageSource.gallery),
+            tooltip: "increment",
+            child: const Icon(Icons.photo_library_rounded),
+      ),
+
+      const Padding(
+            padding: EdgeInsets.only(bottom: 15)),
+
+          FloatingActionButton(
+            heroTag: 'button3',
+            onPressed: () async {
+              PickImagesPage();
+            },
+            tooltip: "increment",
+            child: const Icon(Icons.file_copy_rounded),
+      ),
+
+        ],
+      ),
+
     );
+  }
+
+  void getImage(ImageSource source) async {
+    final file = await ImagePicker().pickImage(
+      source: source,
+      imageQuality: 100
+    );
+
+    if (file?.path != null) {
+      setState(() {
+        imageFile = File(file!.path);
+      });
+    }
+  }
+
+  final ImagePicker imagePicker = ImagePicker();
+
+  List<XFile>? imageFileList = [];
+
+  void selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
+    }
+    setState(() {
+    });
   }
 }
 
@@ -98,4 +183,3 @@ class SearchPage extends StatelessWidget {
     );
   }
 }
-

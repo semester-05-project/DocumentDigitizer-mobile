@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'preview_page.dart';
+import 'package:scan_me/pick_images.dart';
 import 'sign_in.dart';
 import 'sign_up.dart';
 import 'package:flutter/material.dart';
@@ -69,8 +69,8 @@ class HomePageState extends State<HomePage> {
           children: [
             if (imageFile != null) 
               Container(
-                width: 700,
-                height: 600,
+                width: 500,
+                height: 400,
                 alignment: Alignment.center,
                 decoration: BoxDecoration (
                   color: Colors.white,
@@ -83,9 +83,22 @@ class HomePageState extends State<HomePage> {
                 ),
               )
             else
-              Container(
-
-              )
+              Container()
+              // const SizedBox(height: 20,),
+              //   Expanded(
+              //       child: Padding(
+              //         padding: const EdgeInsets.all(8.0),
+              //         child: GridView.builder(
+              //             itemCount: imageFileList!.length,
+              //             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //               crossAxisCount: 3
+              //             ),
+              //             itemBuilder: (BuildContext context, int index) {
+              //               return Image.file(File(imageFileList![index].path), fit: BoxFit.cover);
+              //             }
+              //         ),
+              //       )
+              //   )
           ],
         ),
       ),
@@ -108,7 +121,10 @@ class HomePageState extends State<HomePage> {
 
           FloatingActionButton(
             heroTag: 'button2',
-            onPressed: () => getImage(ImageSource.gallery),
+            //onPressed: () => getImage(ImageSource.gallery),
+            onPressed: () async {
+              selectImages();
+            },
             tooltip: "increment",
             child: const Icon(Icons.photo_library_rounded),
       ),
@@ -119,6 +135,7 @@ class HomePageState extends State<HomePage> {
           FloatingActionButton(
             heroTag: 'button3',
             onPressed: () async {
+              PickImagesPage();
             },
             tooltip: "increment",
             child: const Icon(Icons.file_copy_rounded),
@@ -143,13 +160,18 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  /*void selectImages() async {
-    final List<XFile>? selectedImages = await _picker.pickMultiImage();
-    if (selectedImages!.isNotEmpty){
+  final ImagePicker imagePicker = ImagePicker();
 
+  List<XFile>? imageFileList = [];
+
+  void selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
     }
-
-  }*/
+    setState(() {
+    });
+  }
 }
 
 class SearchPage extends StatelessWidget {

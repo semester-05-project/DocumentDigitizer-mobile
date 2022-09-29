@@ -75,8 +75,7 @@ class _CameraPageState extends State<CameraPage> {
         backgroundColor: Colors.white,
         leading:
         IconButton( 
-          onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => const HomePage())),
+          onPressed: () => Navigator.pop(context),
           icon:const Icon(
             Icons.close,
             size: 30,
