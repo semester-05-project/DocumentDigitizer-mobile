@@ -54,8 +54,14 @@ class PreviewPage extends StatelessWidget {
                 FloatingActionButton(
                   heroTag: 'button3',
                   tooltip: "increment",
-                  onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => const EditPage())),
+                  //onPressed: () => Navigator.of(context)
+                  //.push(MaterialPageRoute(builder: (_) => const EditPage(picture: picture))),
+                  onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EditPage(
+                    picture: picture,
+                  ))),
                   child: const Icon(Icons.check_rounded),
                 ),
               ],

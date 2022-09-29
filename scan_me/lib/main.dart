@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: const <Widget>[
                       Text(
                         "SCAN ME",
                         style: TextStyle(
@@ -86,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   flex: 1,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: const <Widget>[
                       CircularProgressIndicator(),
                       Padding(
                         padding: EdgeInsets.only(top: 20.0),
