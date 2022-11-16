@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan_me/preview_scanned_pdf.dart';
+import 'package:scan_me/user_profile.dart';
 
 import 'camera_mode.dart';
 import 'pick_images.dart';
@@ -34,7 +35,7 @@ class HomePageSignedState extends State<HomePageSigned> {
 
           IconButton(
               onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => const PreviewScannedPDF())),
+                  .push(MaterialPageRoute(builder: (_) => Profile())),
               icon: const Icon(Icons.account_circle_sharp)),
 
 
