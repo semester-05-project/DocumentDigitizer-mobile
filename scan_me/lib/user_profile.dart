@@ -1,45 +1,97 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:scan_me/home_page.dart';
+import 'package:scan_me/home_page_signed_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scan_me/model/user.dart';
 
 class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile>{
+  Map? userDetails;
+
   @override
-  // TODO: implement widget
+  // void initState(){
+  //   super.initState();
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // User? user = auth.currentUser;
+    // String uid = user!.uid;
+    //
+    // FirebaseFirestore.instance.collection('users')
+    //     .doc(uid)
+    //     .get()
+    //     .then((snapshot)
+    //       {
+    //         if(snapshot.exists){
+    //           setState(() {
+    //             userDetails : snapshot.data();
+    //             // name: snapshot.data()!['username'];
+    //             // email : snapshot.data()!['email'];
+    //           });
+    //         }
+    //       }
+    // );
+  // }
+  fetchData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user!.uid;
+    if (uid != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((ds) {
+              userDetails = ds.data();
+            }).catchError((e) {
+               print(e);
+            });
+  }
+
   Widget build(BuildContext context){
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
+        title: Text('Profile'),
         elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.white,
+        // systemOverlayStyle: SystemUiOverlayStyle.dark,
+        // backgroundColor: Colors.white,
         leading:
         IconButton(
             onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const HomePage())),
+                .push(MaterialPageRoute(builder: (_) => const HomePageSigned())),
             icon:const Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,)),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _getHeader(),
-            SizedBox(height: 10,),
-            _profileName("Sivakajan"),
-            SizedBox(height: 14,),
-            _heading("Personal Details")  ,
-            SizedBox(height: 10),
-            _detailsCard(),
-            SizedBox(height: 15,),
-            logoutButton(),
-          ],
-        ),
-      ),
-    );
+      body:FutureBuilder(
+        future: fetchData(),
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.done){
+            return Column(
+                children: <Widget>[
+                  _getHeader(),
+                  SizedBox(height: 15,),
+                  _profileName(userDetails!['username']),
+                  SizedBox(height: 40,),
+                  _heading("Personal Details")  ,
+                  SizedBox(height: 20),
+                  _detailsCard(),
+                  SizedBox(height: 50),
+                  logoutButton()
+              ],
+        );
+
+        }else if(snapshot.hasError){
+          return const Center(child: Text("Error Occured"));
+        } else {
+          return const Center(child: CircularProgressIndicator(),);
+        }
+          },
+    ));
+
   }
   Widget _getHeader(){
     return Row(
@@ -60,7 +112,13 @@ class _ProfileState extends State<Profile>{
         ]
     );
   }
-  Widget _profileName(String name){
+
+  // Stream<UserClass> readUsers() => FirebaseFirestore
+  //     .instance
+  //     .collection("users")
+  //     .snapshots().
+  //     .map((snapshot) => );
+   Widget _profileName(String name){
     return Container(
       width: MediaQuery.of(context).size.width * 0.80,
       child: Center(
@@ -89,15 +147,16 @@ class _ProfileState extends State<Profile>{
           children: [
             ListTile(
               leading: Icon(Icons.person),
-              title: Text("Sivakajan"),
+              title: Text(userDetails!['username']),
             ),
             Divider(
-              height: 0.6,
-              color: Colors.black87,
+              height: 20,
+              color: Colors.black,
+              thickness: 1.0,
             ) ,
             ListTile(
               leading: Icon(Icons.email),
-              title: Text("Sivakajan81@gmail.com"),
+              title: Text(userDetails!['email']),
             )
           ],
         ),
@@ -109,8 +168,13 @@ class _ProfileState extends State<Profile>{
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.logout),
-          Text("Sign out")
+          ButtonBar(
+              children:
+                [
+                  Icon(Icons.logout),
+                  Text("Sign out"),
+                ],
+          )
         ],
       ),) ;
   }
