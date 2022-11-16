@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "663582207194",
+    "firebase_url": "https://documentscannerweb-default-rtdb.firebaseio.com",
+    "project_id": "documentscannerweb",
+    "storage_bucket": "documentscannerweb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663582207194:android:c506720eb201fb61b289e3",
+        "android_client_info": {
+          "package_name": "com.example.scan_me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663582207194-kb5sl9oqtcks34k8a1dshopo4a5oqad7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM8jduTAoiZf-OmAIWhOBiaj8XmVoAU7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663582207194-kb5sl9oqtcks34k8a1dshopo4a5oqad7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

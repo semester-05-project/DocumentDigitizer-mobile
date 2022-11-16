@@ -18,11 +18,34 @@ class _SignInState extends State<SignIn> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future SignIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MainPage()));
-
-    // print(_emailController.text);
+  // Future SignIn() async {
+  //   await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+  //
+  //   Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MainPage()));
+  //
+  //   // print(_emailController.text);
+  // }
+  Future<String?> SignIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password:  _passwordController.text.trim(),
+      );
+      return 'Success';
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        return 'Wrong password provided for that user.';
+      } else {
+        return e.message;
+      }
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   @override
@@ -43,7 +66,7 @@ class _SignInState extends State<SignIn> {
         leading:
         IconButton(
             onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const HomePage())),
+                .push(MaterialPageRoute(builder: (_) => const MainPage())),
             icon:const Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,)),
       ),
       body: SafeArea(
@@ -80,8 +103,8 @@ class _SignInState extends State<SignIn> {
                       ),
                       child: Column(
                         children: [
-                          makeInput(label: "Email",controller: _emailController),
-                          makeInput(label: "Password",obsureText: true,controller: _passwordController),
+                          makeInput(key:"signin_email",label: "Email",controller: _emailController),
+                          makeInput(key:"signin_password",label: "Password",obsureText: true,controller: _passwordController),
                         ],
                       ),
                     ),
@@ -101,9 +124,34 @@ class _SignInState extends State<SignIn> {
                             fontWeight: FontWeight.w800,
                             color: Colors.white, ),
                         ),
-                        onPressed: SignIn
+                        key: Key("signin_submit"),
                         // onPressed: () => Navigator.of(context)
-                            // .push(MaterialPageRoute(builder: (_) => const HomePageSigned())),
+                        //     .push(MaterialPageRoute(builder: (_) => const HomePageSigned())),
+
+
+                        onPressed: () async {
+                          final message = await SignIn(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                          if (message!.contains('Success')) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ),
+                            );
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(message),
+                            ),
+                          );
+                        },
+
+
+
+
+
                       ),
                     ),
                     const Padding(padding: EdgeInsets.only(top: 10)),
@@ -145,7 +193,7 @@ class _SignInState extends State<SignIn> {
 //
 // }
 
-Widget makeInput({label,controller,obsureText = false}){
+Widget makeInput({key,label,controller,obsureText = false}){
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -156,6 +204,7 @@ Widget makeInput({label,controller,obsureText = false}){
       ),),
       const SizedBox(height: 5,),
       TextField(
+        key: Key(key),
         controller: controller,
         obscureText: obsureText,
         decoration: const InputDecoration(
