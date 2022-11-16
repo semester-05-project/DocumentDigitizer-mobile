@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scan_me/home_page_signed_in.dart';
 import 'package:scan_me/landing_page.dart';
 
 import 'home_page.dart';
@@ -18,14 +19,42 @@ class _SignUpState extends State<SignUp> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  Future SignUp() async {
-    if(_passwordController.text == _confirmPasswordController.text){
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MainPage()));
-    }
+  // Future SignUp() async {
+  //   if(_passwordController.text == _confirmPasswordController.text){
+  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+  //     Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MainPage()));
+  //   }
     // print(_emailController.text);
     // print("aknf");
-  }
+    Future<String?> SignUp({
+      required String email,
+      required String password,
+    }) async {
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        return 'Success';
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          return 'The password provided is too weak.';
+        } else if (e.code == 'email-already-in-use') {
+          return 'The account already exists for that email.';
+        }else if(_passwordController!=_confirmPasswordController){
+          return 'Password and Confirm password should match';
+        }else {
+          return e.message;
+        }
+      } catch (e) {
+        return e.toString();
+      }
+    }
+
+
+
+
+
 
   @override
   void dispose() {
@@ -48,7 +77,7 @@ class _SignUpState extends State<SignUp> {
         leading:
         IconButton(
             onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const HomePage())),
+                .push(MaterialPageRoute(builder: (_) => const MainPage())),
             icon:const Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,)),
       ),
       body: SafeArea(
@@ -83,10 +112,10 @@ class _SignUpState extends State<SignUp> {
                       ),
                       child: Column(
                         children: [
-                          makeInput(label: "Username",controller: _usernameController),
-                          makeInput(label: "Email",controller: _emailController),
-                          makeInput(label: "Password",obsureText: true,controller: _passwordController),
-                          makeInput(label: "Confirm Pasword",obsureText: true,controller: _confirmPasswordController)
+                          makeInput(key:"signup_username",label: "Username",controller: _usernameController),
+                          makeInput(key:"signup_email",label: "Email",controller: _emailController),
+                          makeInput(key:"signup_password",label: "Password",obsureText: true,controller: _passwordController),
+                          makeInput(key:"signup_cPassword",label: "Confirm Pasword",obsureText: true,controller: _confirmPasswordController)
                         ],
                       ),
                     ),
@@ -94,6 +123,7 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 40),
                       child: MaterialButton(
+                          key: Key("signup_submit"),
                         minWidth: double.infinity,
                         height:45,
                         color: Colors.deepPurple,
@@ -104,9 +134,28 @@ class _SignUpState extends State<SignUp> {
                             fontWeight: FontWeight.w800,
                             color: Color.fromRGBO(246, 246, 246, 1), ),
                         ),
-                          onPressed: SignUp
+                          // onPressed: null
                       //   onPressed: () => Navigator.of(context)
                       //       .push(MaterialPageRoute(builder: (_) => const SignIn())),
+
+                        onPressed: () async {
+                          final message = await SignUp(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+
+                          if (message!.contains('Success')) {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) => const HomePage()));
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(message),
+                            ),
+                          );
+                        },
+
+
                       ),
                     ),
                     const SizedBox(height: 20,),
@@ -141,7 +190,7 @@ class _SignUpState extends State<SignUp> {
 }
 
 
-Widget makeInput({label,obsureText = false,controller}){
+Widget makeInput({key,label,obsureText = false,controller}){
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -152,6 +201,7 @@ Widget makeInput({label,obsureText = false,controller}){
       ),),
       const SizedBox(height: 5,),
       TextField(
+        key: Key(key),
         controller: controller,
         obscureText: obsureText,
         decoration: const InputDecoration(

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scan_me/home_page.dart';
+import 'package:scan_me/home_page_signed_in.dart';
 import 'package:scan_me/sign_in.dart';
 import 'package:scan_me/sign_up.dart';
 
@@ -108,7 +109,7 @@ class MainPage extends StatelessWidget {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context,snapshot){
               if(snapshot.hasData){
-                return HomePage();
+                return HomePageSigned();
               }else{
                 return LandingPage();
               }

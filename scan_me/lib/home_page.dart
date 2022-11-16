@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan_me/pick_images.dart';
+import 'package:scan_me/preview_scanned_pdf.dart';
 import 'sign_in.dart';
 import 'sign_up.dart';
 import 'package:flutter/material.dart';
@@ -42,10 +43,11 @@ class HomePageState extends State<HomePage> {
                             //     child: Text("Sign In"),
                             // ),
                             //
-                            // const PopupMenuItem<int>(
-                            //     value: 1,
-                            //     child: Text("Sign Up"),
-                            // ),
+                            const PopupMenuItem<int>(
+                                value: 1,
+                                child: Text("PDFs"),
+
+                            ),
                            const PopupMenuItem<int>(
                              value: 2,
                              child: Text("Sign Out"),
@@ -57,11 +59,12 @@ class HomePageState extends State<HomePage> {
                     //   Navigator.of(context).
                     //     pushReplacement( MaterialPageRoute(
                     //       builder: (BuildContext context) => const SignIn()));
-                    // } else if (value == 1) {
-                    //   Navigator.of(context).
-                    //     pushReplacement(MaterialPageRoute(
-                    //       builder: (BuildContext context) => const SignUp()));
-                    // }else
+                    // } else
+                      if (value == 1) {
+                      Navigator.of(context).
+                        pushReplacement(MaterialPageRoute(
+                          builder: (_) => const PreviewScannedPDF()));
+                    }else
                       if(value ==2){
                         FirebaseAuth.instance.signOut();
                     }

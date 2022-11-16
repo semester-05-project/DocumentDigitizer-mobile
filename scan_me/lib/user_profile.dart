@@ -36,8 +36,6 @@ class _ProfileState extends State<Profile>{
             _detailsCard(),
             SizedBox(height: 15,),
             logoutButton(),
-
-
           ],
         ),
       ),

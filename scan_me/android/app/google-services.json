@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "663582207194",
-    "firebase_url": "https://documentscannerweb-default-rtdb.firebaseio.com",
-    "project_id": "documentscannerweb",
-    "storage_bucket": "documentscannerweb.appspot.com"
+    "project_number": "626534464265",
+    "firebase_url": "https://document-digitizer-15b9e-default-rtdb.firebaseio.com",
+    "project_id": "document-digitizer-15b9e",
+    "storage_bucket": "document-digitizer-15b9e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:663582207194:android:c506720eb201fb61b289e3",
+        "mobilesdk_app_id": "1:626534464265:android:48b838ac0cec63543771d8",
         "android_client_info": {
           "package_name": "com.example.scan_me"
         }
       },
       "oauth_client": [
         {
-          "client_id": "663582207194-kb5sl9oqtcks34k8a1dshopo4a5oqad7.apps.googleusercontent.com",
+          "client_id": "626534464265-043vk40m6h8qns58d8qaanhkdrcdh9f6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCM8jduTAoiZf-OmAIWhOBiaj8XmVoAU7U"
+          "current_key": "AIzaSyDS53Lc6z0aKolz-hMAfVDMgenZsUxx0_Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "663582207194-kb5sl9oqtcks34k8a1dshopo4a5oqad7.apps.googleusercontent.com",
+              "client_id": "626534464265-043vk40m6h8qns58d8qaanhkdrcdh9f6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

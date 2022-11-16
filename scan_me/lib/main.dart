@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'package:scan_me/home_page_signed_in.dart';
 import 'package:scan_me/landing_page.dart';
-
-import 'home_page.dart';
 import "package:flutter/material.dart";
 import "package:firebase_core/firebase_core.dart";
 
-void main() async{
+
+Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(myapp());
@@ -37,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), 
+    Timer(const Duration(seconds: 1),
       () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (BuildContext context) => const MainPage()))
       );
