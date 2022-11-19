@@ -10,26 +10,9 @@ import 'filters_page.dart';
 
 class PreviewPage extends StatefulWidget {
   const PreviewPage({Key? key, required this.picture}) : super(key: key);
-  final XFile picture;
-  @override
-  State<PreviewPage> createState() => _PreviewPageState(picture: this.picture);
-}
-
-class _PreviewPageState extends State<PreviewPage> {
-   late XFile picture;
-  _PreviewPageState({picture});
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    setState(() {
-      XFile xfile = widget.picture as XFile;
-      picture: xfile;
-    });
-  }
-
-  Future CropImage() async {
+  Future  File picture;
+ 
+Future CropImage() async {
     // final _pickedImage = await _picker.pickImage(source: source);
     if (picture != null) {
       var image = File(picture.path.toString());
@@ -47,7 +30,7 @@ class _PreviewPageState extends State<PreviewPage> {
         picture = _croppedImage as XFile;
       });
     }
-  }
+  }  
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +39,7 @@ class _PreviewPageState extends State<PreviewPage> {
 
       body: Center(
         child: Column(
+
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.file(
@@ -66,6 +50,17 @@ class _PreviewPageState extends State<PreviewPage> {
               const SizedBox(height: 24),
               Text(picture.path),
               const Padding(
+
+          mainAxisSize: MainAxisSize.min, 
+          children: [
+            Image.file(
+              File(picture.path), 
+              fit: BoxFit.cover, 
+              width: 250
+            ),
+            const SizedBox(height: 24),
+            //Text(picture.name),
+            const Padding(
                   padding: EdgeInsets.only(top: 25)
               ),
               Row(
