@@ -30,4 +30,28 @@
   </li>
   <li>A beautiful interface crafted for Android</li>
 </ul>
+
+&nbsp;
+## Packages Used
+<ul>
+  <li>flutter:</li>
+    <ul><li>sdk: flutter</li><ul>
+  <li>image_picker:</li>
+  <li>camera:</li>
+  <li>path_provider:</li>
+  <li>path:</li>
+  <li>file_picker:</li>
+  <li>open_file:</li>
+  <li>cloud_firestore: ^4.0.4</li>
+  <li>cupertino_icons: ^1.0.2</li>
+  <li>firebase_auth: ^4.1.1</li>
+  <li>file_manager: ^1.0.0</li>
+  <li>firebase_storage: ^11.0.4</li>
+  <li>share_plus:</li>
+  <li>dio:</li>
+  <li>flutter_pdfview: ^1.2.2</li>
+  <li>image_cropper: ^1.5.1</li>
+  <li>flutter_native_image: ^0.0.6+1</li>
+  <li>flutter_image_compress: ^1.1.3</li>
+</ul>
  
