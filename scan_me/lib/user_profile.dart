@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scan_me/home_page_signed_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scan_me/landing_page.dart';
 import 'package:scan_me/model/user.dart';
 
 class Profile extends StatefulWidget {
@@ -11,30 +12,10 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile>{
+  String id = "uid";
   Map? userDetails;
 
-  @override
-  // void initState(){
-  //   super.initState();
-    // FirebaseAuth auth = FirebaseAuth.instance;
-    // User? user = auth.currentUser;
-    // String uid = user!.uid;
-    //
-    // FirebaseFirestore.instance.collection('users')
-    //     .doc(uid)
-    //     .get()
-    //     .then((snapshot)
-    //       {
-    //         if(snapshot.exists){
-    //           setState(() {
-    //             userDetails : snapshot.data();
-    //             // name: snapshot.data()!['username'];
-    //             // email : snapshot.data()!['email'];
-    //           });
-    //         }
-    //       }
-    // );
-  // }
+
   fetchData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
@@ -46,6 +27,7 @@ class _ProfileState extends State<Profile>{
           .get()
           .then((ds) {
               userDetails = ds.data();
+              id = uid;
             }).catchError((e) {
                print(e);
             });
@@ -145,6 +127,15 @@ class _ProfileState extends State<Profile>{
         elevation: 4,
         child: Column(
           children: [
+            // ListTile(
+            //   leading: Icon(Icons.contact_mail_rounded),
+            //   title: Text(id),
+            // ),
+            // Divider(
+            //   height: 20,
+            //   color: Colors.black,
+            //   thickness: 1.0,
+            // ) ,
             ListTile(
               leading: Icon(Icons.person),
               title: Text(userDetails!['username']),
@@ -164,7 +155,23 @@ class _ProfileState extends State<Profile>{
     ) ;
   }
   Widget logoutButton(){
-    return Container(
+    return FilledButton(
+      onPressed: () => {
+        FirebaseAuth.instance.signOut(),
+        Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => const LandingPage()))
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.logout),
+          Text("Sign out"),
+        ],
+      ),
+
+
+    ) ;
+    Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
