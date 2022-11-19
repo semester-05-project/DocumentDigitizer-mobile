@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,9 @@ class HomePageSignedState extends State<HomePageSigned> {
                 double? progress = downloadProgress[index];
                 return
                   ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage("assets/images/pdf_logo.jpg"), // no matter how big it is, it won't overflow
+                    ),
                     focusColor: Colors.blue,
                     contentPadding: EdgeInsets.all(5.0),
                     title: Text(file.name),
