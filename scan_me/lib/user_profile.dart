@@ -117,7 +117,7 @@ class _ProfileState extends State<Profile>{
       width: MediaQuery.of(context).size.width * 0.80,
       child: Text(
         heading,
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),
       ),
     );
   }
