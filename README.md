@@ -1,3 +1,10 @@
-# DocumentDigitizer - Mobile
+# Document Digitizer
 
-This repository is responsible for the Mobile Application Development of the project - " SCAN ME " - Document Digitizer : A Document Scanning and Digitizing Application 
+<table>
+  <tr>
+    <td width="15%"><image src='scan_me/assets/images/logo.png'/></td>
+    <td width="75%"><h1>SCAN ME</h1>
+                    <i> Document Digitizer : A Document Scanning and Digitizing Application </i><br><br>
+    </td>
+  </tr>
+</table>
