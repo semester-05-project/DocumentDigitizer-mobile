@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan_me/preview_scanned_pdf.dart';
 import 'package:scan_me/user_profile.dart';
-
 import 'camera_mode.dart';
 import 'pick_images.dart';
 
@@ -19,8 +18,6 @@ class HomePageSigned extends StatefulWidget {
 
 class HomePageSignedState extends State<HomePageSigned> {
 
-  File? imageFile;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,62 +26,20 @@ class HomePageSignedState extends State<HomePageSigned> {
         actions: [
           // Navigate to the Search Screen
           IconButton(
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => const SearchPage())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(
+                      MaterialPageRoute(builder: (_) => const SearchPage())),
               icon: const Icon(Icons.search)),
 
           IconButton(
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => Profile())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => Profile())),
               icon: const Icon(Icons.account_circle_sharp)),
-
-
-
         ],
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (imageFile != null) 
-              Container(
-                width: 500,
-                height: 400,
-                alignment: Alignment.center,
-                decoration: BoxDecoration (
-                  color: Colors.white,
-                  image: DecorationImage(
-                    image: FileImage(imageFile!),
-                    fit: BoxFit.cover
-                  ),
-                  border: Border.all(width: 8, color: Colors.black),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              )
-            else
-              Container(
-
-              ),
-            const SizedBox(height: 20,),
-              Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GridView.builder(
-                        itemCount: imageFileList!.length,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3
-                        ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Image.file(File(imageFileList![index].path), fit: BoxFit.cover);
-                        }
-                    ),
-                  )
-              )
-          ],
-        ),
-      ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -92,65 +47,45 @@ class HomePageSignedState extends State<HomePageSigned> {
           FloatingActionButton(
             heroTag: 'button1',
             onPressed: () async {
-            await availableCameras().then((value) => Navigator.push(context,
-                MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+              await availableCameras().then((value) =>
+                  Navigator.push(context,
+                      MaterialPageRoute(
+                          builder: (_) => CameraPage(cameras: value))));
             },
             tooltip: "increment",
             child: const Icon(Icons.camera_alt_rounded),
           ),
-
           const Padding(
-            padding: EdgeInsets.only(bottom: 15)),
+              padding: EdgeInsets.only(bottom: 15)),
+
 
           FloatingActionButton(
             heroTag: 'button2',
-            onPressed: () => getImage(ImageSource.gallery),
+            onPressed: () =>
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => PickImagesPage())),
             tooltip: "increment",
             child: const Icon(Icons.photo_library_rounded),
-      ),
+          ),
+          const Padding(
+              padding: EdgeInsets.only(bottom: 15)),
 
-      const Padding(
-            padding: EdgeInsets.only(bottom: 15)),
 
           FloatingActionButton(
             heroTag: 'button3',
-            onPressed: () async {
-              PickImagesPage();
-            },
+            onPressed: () =>
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => PickFilesPage())),
             tooltip: "increment",
             child: const Icon(Icons.file_copy_rounded),
-      ),
+          ),
+          const Padding(
+              padding: EdgeInsets.only(bottom: 15)),
 
         ],
       ),
 
     );
-  }
-
-  void getImage(ImageSource source) async {
-    final file = await ImagePicker().pickImage(
-      source: source,
-      imageQuality: 100
-    );
-
-    if (file?.path != null) {
-      setState(() {
-        imageFile = File(file!.path);
-      });
-    }
-  }
-
-  final ImagePicker imagePicker = ImagePicker();
-
-  List<XFile>? imageFileList = [];
-
-  void selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      imageFileList!.addAll(selectedImages);
-    }
-    setState(() {
-    });
   }
 }
 
