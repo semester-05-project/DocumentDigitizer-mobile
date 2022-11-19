@@ -58,3 +58,11 @@
   <li>flutter_image_compress: ^1.1.3</li>
 </ul>
  
+
+&nbsp;
+## Creators
+<ul>
+  <li>Tharsha Sivapalarajah</li>
+  <li>Akash Tharuka</li>
+  <li>Sivakajan Sivaparan</li>
+</ul>
