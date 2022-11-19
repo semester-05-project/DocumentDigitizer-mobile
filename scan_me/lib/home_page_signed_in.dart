@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:scan_me/crop_home_page.dart';
 import 'package:scan_me/preview_scanned_pdf.dart';
 import 'package:scan_me/user_profile.dart';
 import 'camera_mode.dart';
