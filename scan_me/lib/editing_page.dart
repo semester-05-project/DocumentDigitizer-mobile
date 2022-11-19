@@ -10,7 +10,7 @@ class EditPage extends StatelessWidget {
 
   const EditPage({Key? key, required this.picture}) : super(key: key);
 
-  final XFile picture;
+  final File picture;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class EditPage extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            Text(picture.name),
+            //Text(picture.name),
 
             const Padding(
                   padding: EdgeInsets.only(top: 25)
