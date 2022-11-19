@@ -35,7 +35,7 @@
 ## Packages Used
 <ul>
   <li>flutter:</li>
-    <ul><li>sdk: flutter</li><ul>
+    <ul><li>sdk: flutter</li></ul>
   <li>image_picker:</li>
   <li>camera:</li>
   <li>path_provider:</li>
