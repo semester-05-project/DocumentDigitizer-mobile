@@ -9,6 +9,7 @@ import 'package:scan_me/user_profile.dart';
 import 'camera_mode.dart';
 import 'pick_images.dart';
 
+
 class HomePageSigned extends StatefulWidget {
 
   const HomePageSigned({Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class HomePageSignedState extends State<HomePageSigned> {
             heroTag: 'button3',
             onPressed: () =>
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => PickFilesPage())),
+                    .push(MaterialPageRoute(builder: (_) => PickImagesPage())),
             tooltip: "increment",
             child: const Icon(Icons.file_copy_rounded),
           ),
