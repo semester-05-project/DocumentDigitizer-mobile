@@ -1,16 +1,18 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:scan_me/crop_home_page.dart';
-import 'package:scan_me/preview_scanned_pdf.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:scan_me/user_profile.dart';
 import 'camera_mode.dart';
 import 'pick_images.dart';
 
-class HomePageSigned extends StatefulWidget {
 
+class HomePageSigned extends StatefulWidget {
   const HomePageSigned({Key? key}) : super(key: key);
 
   @override
@@ -18,7 +20,17 @@ class HomePageSigned extends StatefulWidget {
 }
 
 class HomePageSignedState extends State<HomePageSigned> {
+  Future<ListResult>? futureFiles;
+  Map<int, double> downloadProgress ={};
 
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user!.uid;
+    futureFiles = FirebaseStorage.instance.ref('/${uid}').listAll();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +51,61 @@ class HomePageSignedState extends State<HomePageSigned> {
                       .push(MaterialPageRoute(builder: (_) => Profile())),
               icon: const Icon(Icons.account_circle_sharp)),
         ],
+      ),
+      body: FutureBuilder<ListResult>(
+        future: futureFiles,
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            final files = snapshot.data!.items;
+            return ListView.builder(
+              itemBuilder: (context,index){
+                final file = files[index];
+                double? progress = downloadProgress[index];
+                return
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage("assets/images/pdf_logo.jpg"), // no matter how big it is, it won't overflow
+                    ),
+                    focusColor: Colors.blue,
+                    contentPadding: EdgeInsets.all(5.0),
+                    title: Text(file.name),
+                    subtitle: progress != null
+                        ? LinearProgressIndicator(
+                      value: progress,
+                      backgroundColor: Colors.blue,
+                    ):
+                    null,
+                    trailing:Row(
+                      mainAxisSize:  MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(
+                            Icons.download,
+                            color: Colors.black,
+                          ),
+                          onPressed: () => downloadFile(context,index,file),
+                        ),
+                        IconButton(
+                          icon:const Icon(
+                            Icons.delete,
+                            color: Colors.black,
+                          ),
+                          onPressed:  () => {
+                            deleteFile(context,file)
+                          },
+                        )
+                      ],
+                    )
+                );
+              },
+              itemCount: files.length,);
+
+          }else if(snapshot.hasError){
+            return const Center(child: Text("Error Occured"));
+          } else {
+            return const Center(child: CircularProgressIndicator(),);
+          }
+        },
       ),
 
       floatingActionButton: Column(
@@ -76,7 +143,7 @@ class HomePageSignedState extends State<HomePageSigned> {
             heroTag: 'button3',
             onPressed: () =>
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => PickFilesPage())),
+                    .push(MaterialPageRoute(builder: (_) => PickImagesPage())),
             tooltip: "increment",
             child: const Icon(Icons.file_copy_rounded),
           ),
@@ -86,6 +153,42 @@ class HomePageSignedState extends State<HomePageSigned> {
         ],
       ),
 
+    );
+  }
+
+  Future deleteFile(context,Reference ref) async {
+    try {
+      await FirebaseStorage.instance.ref().child('/${ref.fullPath}').delete();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Deleted ${ref.name}')),
+      );
+    } catch (e) {
+      print(e);
+    }
+
+  }
+
+  Future downloadFile(context,int index,Reference ref) async {
+    final url = await ref.getDownloadURL();
+
+    final tempDir = await getTemporaryDirectory();
+    final path = '${tempDir.path}/${ref.name}';
+
+    await Dio().download(
+        url,
+        path,
+
+        onReceiveProgress:(receive,total){
+          double progress = receive/total;
+
+          setState(() {
+            downloadProgress[index] = progress;
+          });
+        }
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Downloaded ${ref.name}')),
     );
   }
 }
