@@ -1,7 +1,7 @@
 # Document Digitizer
 [![Dart Version](https://img.shields.io/badge/Dart-v2.19.0-blueviolet.svg)](https://dart.dev/)
-[![Kotlin Version](https://img.shields.io/badge/Kotlin-v1.6.10-blue.svg)](https://kotlinlang.org)  
-[![Platform](https://img.shields.io/badge/Platform-Android-green.svg?style=flat)](https://www.android.com/) 
+[![Kotlin Version](https://img.shields.io/badge/Kotlin-v1.6.10-blue.svg)](https://kotlinlang.org)
+[![Platform](https://img.shields.io/badge/Platform-Android-green.svg?style=flat)](https://www.android.com/)
 
 <table>
   <tr>
