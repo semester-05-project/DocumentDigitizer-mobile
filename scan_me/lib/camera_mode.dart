@@ -1,10 +1,9 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'home_page.dart';
+import 'home_page_signed_in.dart';
 import 'preview_page.dart';
 
 class CameraPage extends StatefulWidget {
@@ -77,8 +76,9 @@ class _CameraPageState extends State<CameraPage> {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.white,
         leading:
-        IconButton( 
-          onPressed: () => Navigator.pop(context),
+        IconButton(
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => HomePageSigned())),
           icon:const Icon(
             Icons.close,
             size: 30,

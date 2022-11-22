@@ -1,118 +1,124 @@
-import 'dart:math';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:scan_me/crop_app_helper.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
+
+import 'camera_mode.dart';
+import 'cropping_page.dart';
 import 'editing_page.dart';
 
 import 'filters_page.dart';
 
-class PreviewPage extends StatefulWidget {
+class PreviewPage extends StatelessWidget {
   const PreviewPage({Key? key, required this.picture}) : super(key: key);
-  final  File picture;
-  @override
-  State<PreviewPage> createState() => _PreviewPageState( );
-}
 
-class _PreviewPageState extends State<PreviewPage> {
-  File? picture1;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    setState(() => picture1 = widget.picture);
-  }
-
-  Future CropImage() async {
-    // final _pickedImage = await _picker.pickImage(source: source);
-    File picture = widget.picture;
-    if (picture != null) {
-      var image = File(picture.path.toString());
-      final _sizeInKbBefore = image.lengthSync() / 1024;
-      print('Before Compress $_sizeInKbBefore kb');
-      var _compressedImage = await CropAppHelper.compress(image: image);
-      final _sizeInKbAfter = _compressedImage.lengthSync() / 1024;
-      print('After Compress $_sizeInKbAfter kb');
-      var _croppedImage = await CropAppHelper.cropImage(_compressedImage);
-      print('cropped Image');
-      if (_croppedImage == null) {
-        return;
-      }
-      // picture = File(_croppedImage!.path);
-      print(picture1);
-      print(_croppedImage);
-      setState(() => picture1 = _croppedImage);
-      print("picture");
-      print(picture1);
-    }
-  }
+  final File picture;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Preview Page')),
+      appBar: AppBar(title: const Text('Preview Page'),
+      elevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      backgroundColor: Colors.white,
+      leading:
+      IconButton(
+          onPressed: () {
+            showAlertDialog(context);
+          },
+          icon:const Icon(
+            Icons.close,
+            size: 30,
+            color: Colors.black,
+          )
+      ),
+    ),
 
       body: Center(
         child: Column(
-
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.file(
-                  File(picture1!.path),
-                  fit: BoxFit.cover,
-                  width: 250
-              ),
-              const SizedBox(height: 24),
-              Text(widget.picture.path.split('/').last),
-                  const Padding(
+          mainAxisSize: MainAxisSize.min, 
+          children: [
+            Image.file(
+              File(picture.path), 
+              fit: BoxFit.cover, 
+              width: 250
+            ),
+            const SizedBox(height: 24),
+            //Text(picture.name),
+            const Padding(
                   padding: EdgeInsets.only(top: 25)
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children:  <Widget>[
 
-                  FloatingActionButton(
-                    heroTag: 'button1',
-                    tooltip: "increment",
-                    onPressed: () {
-                      CropImage();
-                    },
-                    child: const Icon(Icons.crop_rounded),
-                  ),
+                FloatingActionButton(
+                  heroTag: 'button1',
+                  tooltip: "increment",
+                  onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const CropPage())),
+                  child: const Icon(Icons.crop_rounded),
+                ),
 
+                FloatingActionButton(
+                  heroTag: 'button2',
+                  tooltip: "increment",
+                  onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => FiltersPage())),
+                  child: const Icon(Icons.mode_edit_rounded),
+                ),
 
-                  FloatingActionButton(
-                    heroTag: 'button2',
-                    tooltip: "increment",
-                    onPressed: () =>
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(
-                            builder: (_) => const FiltersPage())),
-                    child: const Icon(Icons.mode_edit_rounded),
-                  ),
-
-                  FloatingActionButton(
-                    heroTag: 'button3',
-                    tooltip: "increment",
-                    //onPressed: () => Navigator.of(context)
-                    //.push(MaterialPageRoute(builder: (_) => const EditPage(picture: picture))),
-                    onPressed: () =>
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    EditPage(
-                                      picture: picture1!,
-                                    ))),
-                    child: const Icon(Icons.check_rounded),
-                  ),
-                ],
-              ),
-            ]
+                FloatingActionButton(
+                  heroTag: 'button3',
+                  tooltip: "increment",
+                  //onPressed: () => Navigator.of(context)
+                  //.push(MaterialPageRoute(builder: (_) => const EditPage(picture: picture))),
+                  onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EditPage(
+                    //picture: picture,
+                  ))),
+                  child: const Icon(Icons.check_rounded),
+                ),
+              ],
+            ),
+          ]
         ),
       ),
     );
   }
 }
 
+showAlertDialog(BuildContext context) {
+  // set up the buttons
+  Widget cancelButton = ElevatedButton(
+    child: Text("Cancel"),
+    onPressed: () => Navigator.pop(context),
+  );
+  Widget continueButton = ElevatedButton(
+    child: Text("Discard"),
+    onPressed: () async {
+      await availableCameras().then((value) =>
+          Navigator.push(context,
+              MaterialPageRoute(
+                  builder: (_) => CameraPage(cameras: value))));
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Confirmation"),
+    content: Text("Are you sure to discard this image ?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
